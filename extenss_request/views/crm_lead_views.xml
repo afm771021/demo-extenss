@@ -289,130 +289,148 @@
             </xpath>
 
             <xpath expr="//page[@name='financial_position']" position="after">
-                    <page string="Source of income" name="surce_income" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
-                        <group>
-                            <group string="Income">
-                                <field name="surce_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
-                                    <tree>
-                                        <field name="tipo_ingreso"/>
-                                        <field name="importe_ing" sum="# regs"/>
-                                    </tree>
-                                    <form>
-                                        <group>
-                                            <group>
-                                                <field name="tipo_ingreso"/>
-                                                <field name="importe_ing"/>
-                                                <field name="persona_ing"/>
-                                                <field name="importe_mensual_ing"/>
-                                                <field name="frecuencia_ing"/>
-                                                <field name="sujeto_impuestos_ing"/>
-                                                <field name="comentarios_ing"/>
-                                            </group>
-                                        </group>
-                                    </form>
-                                </field>
-                            </group>
-                            <group string="Expenses">
-                                <field name="exp_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
-                                    <tree>
-                                        <field name="tipo_gasto"/>
-                                        <field name="importe_gas" sum="# regs"/>
-                                    </tree>
-                                    <form>
-                                        <group>
-                                            <group>
-                                                <field name="tipo_gasto"/>
-                                                <field name="importe_gas"/>
-                                                <field name="persona_gas"/>
-                                                <field name="importe_mensual_gas"/>
-                                                <field name="frecuencia_gas"/>
-                                                <field name="comentarios_gas"/>
-                                            </group>
-                                        </group>
-                                    </form>
-                                </field>
-                            </group>
-                        </group>
-                    </page>
-                </xpath>
-                <xpath expr="//page[@name='surce_income']" position="after">
-                    <page string="Residence Profile" name="residence_profile" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
-                        <group>
-                            <group string="Residence Profile">
-                                <field name="housing_type_rp" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="owners_name" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="owners_phone" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="montly_rent" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="months_residence" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="residency_profile" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                            </group>
-                            <group string="Current household expenses">
-                                <field name="rent" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
-                                <field name="first_mortage" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="another_finantiation" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
-                                <field name="risk_insurance" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="real_state_taxes" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="mortage_insurance" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="debts_cowners" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
-                                <field name="other" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
-                                <field name="total_resident"/>
-                            </group>
-                        </group>
-                    </page>
-                </xpath>
-                <xpath expr="//page[@name='surce_income']" position="after">
-                    <page string="Ownership" name="ownership" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
-                        <field name="owner_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
-                            <tree>
-                                <field name="description_own"/>
-                                <field name="percentage_properties"/>
-                                <field name="purchace_price"/>
-                                <field name="bookvalue"/>
-                            </tree>
-                            <form>
-                                <group>
+                <page string="Source of income" name="surce_income" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
+                    <group>
+                        <group string="Income">
+                            <field name="surce_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
+                                <tree>
+                                    <field name="tipo_ingreso"/>
+                                    <field name="importe_ing" sum="# regs"/>
+                                </tree>
+                                <form>
                                     <group>
-                                        <field name="description_own"/>
-                                        <!--><field name="percentage_properties"/><-->
-                                        <label for="percentage_properties"/>
-                                        <div id="percentage_properties" >
-                                            <field name="percentage_properties" widget="float" class="oe_inline"/>
-                                            <span class="oe_grey"> %%</span>
-                                        </div>
-                                        <field name="purchace_price"/>
-                                        <field name="bookvalue"/>
-                                        <field name="market_value"/>
-                                        <field name="stock_exchange_value"/>
-                                        <field name="mortages_own"/>
+                                        <group>
+                                            <field name="tipo_ingreso"/>
+                                            <field name="importe_ing"/>
+                                            <field name="persona_ing"/>
+                                            <field name="importe_mensual_ing"/>
+                                            <field name="frecuencia_ing"/>
+                                            <field name="sujeto_impuestos_ing"/>
+                                            <field name="comentarios_ing"/>
+                                        </group>
                                     </group>
+                                </form>
+                            </field>
+                        </group>
+                        <group string="Expenses">
+                            <field name="exp_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
+                                <tree>
+                                    <field name="tipo_gasto"/>
+                                    <field name="importe_gas" sum="# regs"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="tipo_gasto"/>
+                                            <field name="importe_gas"/>
+                                            <field name="persona_gas"/>
+                                            <field name="importe_mensual_gas"/>
+                                            <field name="frecuencia_gas"/>
+                                            <field name="comentarios_gas"/>
+                                        </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='surce_income']" position="after">
+                <page string="Residence Profile" name="residence_profile" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
+                    <group>
+                        <group string="Residence Profile">
+                            <field name="housing_type_rp" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="owners_name" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="owners_phone" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="montly_rent" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="months_residence" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="residency_profile" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                        </group>
+                        <group string="Current household expenses">
+                            <field name="rent" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
+                            <field name="first_mortage" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="another_finantiation" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
+                            <field name="risk_insurance" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="real_state_taxes" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="mortage_insurance" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="debts_cowners" attrs="{'readonly': [('stage_id', '!=', 1)]}"/>
+                            <field name="other" attrs="{'readonly': [('stage_id', '!=', 1)]}"/> 
+                            <field name="total_resident"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='surce_income']" position="after">
+                <page string="Ownership" name="ownership" attrs="{'invisible' : [('partner_type', '=', 'company')]}"><!-->invisible="0"><-->
+                    <field name="owner_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
+                        <tree>
+                            <field name="description_own"/>
+                            <field name="percentage_properties"/>
+                            <field name="purchace_price"/>
+                            <field name="bookvalue"/>
+                        </tree>
+                        <form>
+                            <group>
+                                <group>
+                                    <field name="description_own"/>
+                                    <!--><field name="percentage_properties"/><-->
+                                    <label for="percentage_properties"/>
+                                    <div id="percentage_properties" >
+                                        <field name="percentage_properties" widget="float" class="oe_inline"/>
+                                        <span class="oe_grey"> %%</span>
+                                    </div>
+                                    <field name="purchace_price"/>
+                                    <field name="bookvalue"/>
+                                    <field name="market_value"/>
+                                    <field name="stock_exchange_value"/>
+                                    <field name="mortages_own"/>
                                 </group>
-                            </form>
-                        </field>
-                    </page>
-                </xpath>
-                <xpath expr="//page[@name='surce_income']" position="after">
-                    <page string="Personal references" name="personal_references" attrs="{'invisible' : [('partner_type', '=', 'company')]}">
-                        <field name="personal_ref_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
-                            <tree>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='surce_income']" position="after">
+                <page string="Personal references" name="personal_references" attrs="{'invisible' : [('partner_type', '=', 'company')]}">
+                    <field name="personal_ref_ids" attrs="{'readonly': [('stage_id', '!=', 1)]}">
+                        <tree>
+                            <field name="type_reference_personal_ref"/>
+                            <field name="reference_name_personal_ref"/>
+                            <field name="phone_personal_ref"/>
+                            <field name="cell_phone_personal_res"/>
+                            <field name="email_personal_ref"/>
+                        </tree>
+                        <form>
+                            <group>
                                 <field name="type_reference_personal_ref"/>
                                 <field name="reference_name_personal_ref"/>
                                 <field name="phone_personal_ref"/>
                                 <field name="cell_phone_personal_res"/>
                                 <field name="email_personal_ref"/>
-                            </tree>
-                            <form>
-                                <group>
-                                    <field name="type_reference_personal_ref"/>
-                                    <field name="reference_name_personal_ref"/>
-                                    <field name="phone_personal_ref"/>
-                                    <field name="cell_phone_personal_res"/>
-                                    <field name="email_personal_ref"/>
-                                </group>
-                            </form>
-                        </field>
-                    </page>
-                </xpath>
-            
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//page[@name='personal_references']" position="after">
+                <page name="payroll" string="Payroll" attrs="{'invisible' : [('product_name', '!=', 'dn')]}">
+                    <form>
+                        <header>
+                            <button string="Calculate" name="action_calculate_pc" type="object" class="oe_highlight"/>
+                            <button string="Offers" name="action_get_offers" type="object" class="oe_highlight"/>
+                        </header>
+                        <group>
+                            <group>
+                                <field name="perceptions"/>
+                                <field name="payment_capacity" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="deductions"/>
+                            </group>
+                        </group>
+                    </form>
+                </page>
+            </xpath>
         </field>
     </record>
 
