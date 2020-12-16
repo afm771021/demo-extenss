@@ -122,6 +122,7 @@
                 <field name="hidevr" invisible="1"/>
                 <field name="bir" invisible="1"/>
                 <field name="cs" invisible="1"/><field name="af" invisible="1"/><field name="ap" invisible="1"/>
+                <field name="dn" invisible="1"/>
             </field>
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page string="Amotization" name="amotization">
@@ -136,7 +137,7 @@
                             <field name="payment"/>
                             <field name="iva_capital" attrs="{ 'column_invisible' : [('parent.af', '=', False)]}"/>
                             <field name="iva_rent" attrs="{ 'column_invisible' : [('parent.ap', '=', False)]}"/>
-                            <field name="total_rent" attrs="{ 'column_invisible' : [('parent.cs', '=', True)]}"/>
+                            <field name="total_rent" attrs="{ 'column_invisible' : ['|', ('parent.cs', '=', True),('parent.dn', '=', True)]}"/>
                         </tree>
                     </field>
                 </page>

@@ -19,8 +19,8 @@ class SaleOrder(models.Model):
                 raise Warning('Star Date must be greater or equal than Today for %s' % quotation.name)
             if not quotation.amount:
                 raise Warning('Please provide a Request Amount for %s' % quotation.name)
-            if quotation.amount < quotation.min_amount or quotation.amount > quotation.max_amount:
-                raise Warning('The Request Amount must be older than Min Amount and less than Max Amount %s' % quotation.name)
+            # if quotation.amount < quotation.min_amount or quotation.amount > quotation.max_amount:
+            #     raise Warning('The Request Amount must be older than Min Amount and less than Max Amount %s' % quotation.name)
             if quotation.credit_type.shortcut == 'AF' or quotation.credit_type.shortcut == 'AP':
                 if not quotation.fondeador:
                     raise Warning('Please provide a Fondeador %s' % quotation.name)
@@ -388,6 +388,7 @@ class SaleOrder(models.Model):
     cs = fields.Boolean(String='CS')
     af = fields.Boolean(String='AF')
     ap = fields.Boolean(String='AP')
+    dn = fields.Boolean(string='DN')
     iva = fields.Monetary('IVA',  currency_field='company_currency', tracking=True)
     purchase_option = fields.Float('Purchase Option Porcentage', (2,6))
     purchase_option2 = fields.Monetary('Purchase Option Value', currency_field='company_currency', tracking=True)
@@ -493,11 +494,17 @@ class SaleOrder(models.Model):
         else:
             self.hide = False
             self.cs = False
-        if self.credit_type.shortcut == 'AP' or self.credit_type.shortcut == 'CS':
+        if self.credit_type.shortcut == 'DN':
+            self.hide = True
+            self.dn = True
+        else:
+            self.hide = False
+            self.dn = False
+        if self.credit_type.shortcut == 'AP' or self.credit_type.shortcut == 'CS' or self.credit_type.shortcut == 'DN':
             self.hidepo = True
         else:
             self.hidepo = False
-        if self.credit_type.shortcut == 'AF' or self.credit_type.shortcut == 'CS':
+        if self.credit_type.shortcut == 'AF' or self.credit_type.shortcut == 'CS' or self.credit_type.shortcut == 'DN':
             self.hidevr = True
         else:
             self.hidevr = False
