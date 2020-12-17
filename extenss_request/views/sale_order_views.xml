@@ -121,8 +121,10 @@
                 <field name="hidepo" invisible="1"/>
                 <field name="hidevr" invisible="1"/>
                 <field name="bir" invisible="1"/>
-                <field name="cs" invisible="1"/><field name="af" invisible="1"/><field name="ap" invisible="1"/>
-                <field name="dn" invisible="1"/>
+                <field name="cs" invisible="1" force_save="1"/>
+                <field name="af" invisible="1" force_save="1"/>
+                <field name="ap" invisible="1" force_save="1"/>
+                <field name="dn" invisible="1" force_save="1"/>
             </field>
             <xpath expr="//page[@name='customer_signature']" position="after">
                 <page string="Amotization" name="amotization">

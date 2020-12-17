@@ -421,11 +421,16 @@
                         </header>
                         <group>
                             <group>
-                                <field name="perceptions"/>
-                                <field name="payment_capacity" readonly="1"/>
+                                <field name="catlg_product"/>
                             </group>
                             <group>
-                                <field name="deductions"/>
+                                <group>
+                                    <field name="perceptions"/>
+                                    <field name="deductions"/>
+                                </group>
+                                <group>
+                                    <field name="payment_capacity" readonly="1"/>
+                                </group>
                             </group>
                         </group>
                     </form>

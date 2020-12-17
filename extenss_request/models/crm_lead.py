@@ -2,6 +2,7 @@ from odoo import fields, models, exceptions, api, _
 from datetime import datetime, date
 from odoo.exceptions import Warning, UserError, ValidationError
 import base64
+import math
 
 class ExtenssRequestDestination(models.Model):
     _name =  'extenss.request.destination'
@@ -442,22 +443,59 @@ class Lead(models.Model):
 
     def action_get_offers(self):
         amount = self.payment_capacity
-        self.write({
-            'planned_revenue': amount,
-        })
-        cred_type_prod = self.env['extenss.product.template'].search([('credit_type.shortcut', '=', 'DN')])
-        for cred in cred_type_prod:
-            prods_ids = self.env['extenss.product.product'].search([('product_tmpl_id', '=', cred.id)])
-            for prod_id in prods_ids:
-                if cred.min_amount < amount and cred.max_amount > amount:
-                    self.env['sale.order'].create({
-                        'opportunity_id': self.id,
-                        'partner_id': self.partner_id.id,
-                        'product_id': prod_id.id,
-                        'date_order': datetime.now().date(),
-                        'date_start': datetime.now().date(),
-                        'amount': amount,
-                    })
+
+        # cred_type_prod = self.env['extenss.product.template'].search([('credit_type.shortcut', '=', 'DN')])
+        # for cred in cred_type_prod:
+        prods_ids = self.env['extenss.product.product'].search([('id', '=', self.catlg_product.id)])
+        for prod_id in prods_ids:
+            print('prod_id.min_amount', prod_id.min_amount)
+            print('prod_id.max_amount', prod_id.max_amount)
+
+            term = prod_id.product_template_attribute_value_ids.term_extra
+            anual_rate = prod_id.product_template_attribute_value_ids.interest_rate_extra
+            frecuency = prod_id.product_template_attribute_value_ids.frequencies_extra.name
+            name_prod = prod_id.name
+
+            print(frecuency)
+
+            if frecuency == 'Mensual':
+                anualperiods = 12
+            if frecuency == 'Quincenal':
+                anualperiods = 24
+
+            print(name_prod)
+            print('term',term)
+            print('anual_rate',anual_rate)
+            #anual_rate = anual_rate/1.16
+            anual_rate = anual_rate/100
+
+            period_rate = anual_rate / anualperiods
+
+            print(period_rate)
+            op2 = (period_rate + 1).__pow__(term)
+            print(op2)
+            op3 = ((period_rate + 1).__pow__(term)) - 1
+            print(op3)
+            divisor = (op2 /op3) * period_rate
+            print(divisor)
+            max_cap = amount/divisor
+            print(max_cap)
+
+            max_cap = round(math.floor(max_cap), -3)
+
+            self.write({
+                'planned_revenue': max_cap,# * term,
+            })
+
+            if prod_id.min_amount < max_cap and prod_id.max_amount > max_cap:
+                self.env['sale.order'].create({
+                    'opportunity_id': self.id,
+                    'partner_id': self.partner_id.id,
+                    'product_id': prod_id.id,
+                    'date_order': datetime.now().date(),
+                    'date_start': datetime.now().date(),
+                    'amount': max_cap,# * term,
+                })
 
         #reg_prods = self.env['extenss.product.template'].search([('min_amount', '<', amount),('max_amount', '>', amount)])
         #for reg_prod in reg_prods:
@@ -512,6 +550,7 @@ class Lead(models.Model):
     ref_number = fields.Char(string='Reference number', tracking=True, translate=True)
 
     product_name = fields.Selection([('af','Arrendamiento Financiero'),('ap','Arrendamiento Puro'),('cs','Crédito Simple'),('dn','Descuento Nómina')], string='Product', tracking=True, translate=True)
+    catlg_product = fields.Many2one('extenss.product.product', string='Product')#, default=lambda self: self.env['extenss.product.template'].search([('credit_type.shortcut', '=', 'DN')]))
     perceptions = fields.Monetary(string='Perceptions', currency_field='company_currency', tracking=True, translate=True)
     deductions = fields.Monetary(string='Deductions', currency_field='company_currency', tracking=True, translate=True)
     payment_capacity = fields.Monetary(string='Payment capacity', currency_field='company_currency', tracking=True, translate=True)
