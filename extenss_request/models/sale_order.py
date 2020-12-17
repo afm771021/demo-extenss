@@ -373,7 +373,7 @@ class SaleOrder(models.Model):
     partner_id = fields.Many2one('res.partner', translate=True)
 
     #product_custom_attribute_value_ids = fields.One2many('extenss.product.attribute.custom.value', 'sale_order_line_id', string="Custom Values")
-    order_id = fields.Many2one('sale.order', string='Order Reference', required=True, ondelete='cascade', index=True, copy=False)
+    order_id = fields.Many2one('sale.order', string='Order Reference', ondelete='cascade', index=True, copy=False)#required=True
     # product_uom_qty = fields.Float(string='Quantity', digits='Product Unit of Measure', required=True, default=1.0)
     # product_uom = fields.Many2one('uom.uom', string='Unit of Measure', domain="[('category_id', '=', product_uom_category_id)]")
     # product_uom_category_id = fields.Many2one(related='product_id.uom_id.category_id', readonly=True)
@@ -381,14 +381,14 @@ class SaleOrder(models.Model):
     calculate = fields.Boolean(string="calculate", default=True)
     send_email = fields.Boolean(string="send email", default=True)
     confirm = fields.Boolean(string="confirm", default=True)
-    hide = fields.Boolean(string="Hide")
-    hidepo = fields.Boolean(string="Hide")
-    hidevr = fields.Boolean(string="Hide")
-    bir = fields.Boolean(string="Hide")
-    cs = fields.Boolean(String='CS')
-    af = fields.Boolean(String='AF')
-    ap = fields.Boolean(String='AP')
-    dn = fields.Boolean(string='DN')
+    hide = fields.Boolean(string="Hide", default=False)
+    hidepo = fields.Boolean(string="Hide", default=False)
+    hidevr = fields.Boolean(string="Hide", default=False)
+    bir = fields.Boolean(string="Hide", default=False)
+    cs = fields.Boolean(String='CS', default=False)
+    af = fields.Boolean(String='AF', default=False)
+    ap = fields.Boolean(String='AP', default=False)
+    dn = fields.Boolean(string='DN', default=False)
     iva = fields.Monetary('IVA',  currency_field='company_currency', tracking=True)
     purchase_option = fields.Float('Purchase Option Porcentage', (2,6))
     purchase_option2 = fields.Monetary('Purchase Option Value', currency_field='company_currency', tracking=True)
@@ -492,13 +492,11 @@ class SaleOrder(models.Model):
             self.hide = True
             self.cs = True
         else:
-            self.hide = False
             self.cs = False
         if self.credit_type.shortcut == 'DN':
             self.hide = True
             self.dn = True
         else:
-            self.hide = False
             self.dn = False
         if self.credit_type.shortcut == 'AP' or self.credit_type.shortcut == 'CS' or self.credit_type.shortcut == 'DN':
             self.hidepo = True

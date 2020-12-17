@@ -474,13 +474,12 @@
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <graph string="Credit Graph">
-                <field name="credit_id" interval="month" type="row"/>
-                <field name="amount_financed" type="row"/>
+                <field name="credit_id" type="row"/>
             </graph>
         </field>
     </record>
 
-    <!-- <record id="extenss.credit_dn_view_dashboard" model="ir.ui.view">
+    <record id="extenss_credit_dn_view_dashboard" model="ir.ui.view">
         <field name="name">extenss.credit.dn.view.dashboard</field>
         <field name="model">extenss.credit</field>
         <field name="mode">primary</field>
@@ -489,9 +488,9 @@
                 <view type="graph" ref="extenss_dn.extenss_credit_dn_view_graph"/>
                 <group>
                     <group>
-                        <aggregate name="credits" string="Credits" group_operator="count" field="id" measure="__count__"/> -->
-                        <!-- <aggregate name="expected_revenue_aggregate" field="planned_revenue" string="Expected Revenue"/>
-                        <aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
+                        <aggregate name="credits" string="Credits" group_operator="count" field="id" measure="__count__"/>
+                        <aggregate name="amount_financed_aggregate" field="amount_financed" string="amount_financed"/>
+                        <!--<aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
                         <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
                         <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>
                         <aggregate name="days_to_assign" string="Days to Assign" field="day_open" group_operator="avg" value_label="days"/>
@@ -500,14 +499,14 @@
                     <!-- </group> -->
                     <!-- <group col="1">
                         <widget name="pie_chart" title="Win/Loss Ratio" attrs="{'groupby': 'won_status', 'domain': '[\'|\', (\'active\', \'=\', False), (\'active\', \'=\', True), (\'won_status\', \'!=\', \'pending\')]'}"/>
-                        <widget name="pie_chart" title="Medium" attrs="{'groupby': 'medium_id'}"/>
-                    </group> -->
-                <!-- </group> -->
+                        <widget name="pie_chart" title="Medium" attrs="{'groupby': 'medium_id'}"/>-->
+                    </group>
+                </group>
                 <!-- <view type="pivot" ref="crm.crm_lead_view_pivot"/>
                 <view type="cohort" ref="crm_enterprise.crm_lead_view_cohort"/> -->
-            <!-- </dashboard>
+            </dashboard>
         </field>
-    </record> -->
+    </record>
 
     <!-- <record id="extenss_credit_conciliation_lines_tree" model="ir.ui.view">
         <field name="name">extenss.credit.conciliation.lines.tree</field>
@@ -535,6 +534,13 @@
             </search>
         </field>
     </record> -->
+
+    <record id="action_dashboard_dn_graph" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="extenss_dn.extenss_credit_dn_view_dashboard"/>
+        <!-- <field name="act_window_id" ref="crm_enterprise.crm_opportunity_action_dashboard"/> -->
+    </record>
 
     <record id="action_extenss_dn" model="ir.actions.act_window">
         <field name="name">Payroll Discount</field>

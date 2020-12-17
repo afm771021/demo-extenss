@@ -336,7 +336,7 @@ class ExtenssProductProduct(models.Model):
     #partner_ref = fields.Char('Customer Ref', compute='_compute_partner_ref')
 
     active = fields.Boolean('Active', default=True, help="If unchecked, it will allow you to hide the product without removing it.")
-    product_template_attribute_value_ids = fields.Many2many('extenss.product.template.attribute.value', relation='extenss_product_variant_combination', string="Attribute Values", ondelete='restrict')
+    product_template_attribute_value_ids = fields.Many2many('extenss.product.template.attribute.value', relation='extenss_product_variant_combination', string="Attribute Values")#ondelete='restrict'
     combination_indices = fields.Char(compute='_compute_combination_indices', store=True, index=True)
     is_product_variant = fields.Boolean(compute='_compute_is_product_variant')
     image_variant_1920 = fields.Image("Variant Image", max_width=1920, max_height=1920)
