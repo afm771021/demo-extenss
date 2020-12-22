@@ -310,10 +310,6 @@ class Lead(models.Model):
                     })
 
     def validations(self):
-        count_sales = self.env['sale.order'].search_count([('opportunity_id', '=', self.id)])
-        if count_sales == 0:
-            raise ValidationError(_('Please add a quote'))
-
         docs = self.env['documents.document'].search(['|', ('partner_id', '=', self.partner_id.id), ('lead_id', '=', self.id)])
         for reg_docs in docs:
             if not reg_docs.attachment_id:
@@ -416,9 +412,9 @@ class Lead(models.Model):
                                     raise ValidationError(_('Unsigned document %s' % ref.reference))
                 if len(doc_fal) > 0:
                     raise ValidationError(_('Must add %s for order %s' % (doc_fal,reg.name)))
-
-                self.action_duplicate()
-                self.btn_active = False
+            
+            self.action_duplicate()
+            self.btn_active = False
 
     def action_autorize_sale(self):
         self.user_auth_req = self.env.user.id
@@ -499,29 +495,14 @@ class Lead(models.Model):
                     'date_order': datetime.now().date(),
                     'date_start': datetime.now().date(),
                     'amount': max_cap,# * term,
-
-                    'credit_type': prod_id.credit_type.id,
-                    'min_age': prod_id.min_age,
-                    'max_age': prod_id.max_age,
-                    'min_amount': prod_id.min_amount,
-                    'max_amount': prod_id.max_amount,
-                    'hide': True,
-                    'dn': True,
-                    'hidepo': True,
-                    'hidevr': True,
-                    'calculation_base': prod_id.calculation_base.name,
-                    'tax_id': prod_id.taxes_id.amount,
-                    'rate_arrears_interest': prod_id.rate_arrears_interest,
-                    'interest_rate_value': prod_id.interest_rate_extra,
-                    'base_interest_rate': prod_id.base_interest_rate.name,
-                    'point_base_interest_rate': prod_id.point_base_interest_rate,
-                    'include_taxes': prod_id.include_taxes,
-                    'term': prod_id.product_template_attribute_value_ids.term_extra,
-                    'days_pre_notice': prod_id.days_pre_notice,
-                    'days_past_due': prod_id.days_past_due,
-                    'number_pay_rest': prod_id.number_pay_rest,
-                    'frequency_id': prod_id.frequency_extra,
                 })
+
+        #reg_prods = self.env['extenss.product.template'].search([('min_amount', '<', amount),('max_amount', '>', amount)])
+        #for reg_prod in reg_prods:
+            #print(reg_prod.id)
+
+        
+        #raise UserError(_('Capacity to pay successfully generated!'))
     
     def action_calculate_pc(self):
         self.payment_capacity = (self.perceptions - self.deductions) * .80
@@ -569,18 +550,13 @@ class Lead(models.Model):
     ref_number = fields.Char(string='Reference number', tracking=True, translate=True)
 
     product_name = fields.Selection([('af','Arrendamiento Financiero'),('ap','Arrendamiento Puro'),('cs','Crédito Simple'),('dn','Descuento Nómina')], string='Product', tracking=True, translate=True)
-    catlg_product = fields.Many2one('extenss.product.product', string='Product')#compute='_compute_catlg_prod', store=True
+    catlg_product = fields.Many2one('extenss.product.product', string='Product')#, default=lambda self: self.env['extenss.product.template'].search([('credit_type.shortcut', '=', 'DN')]))
     perceptions = fields.Monetary(string='Perceptions', currency_field='company_currency', tracking=True, translate=True)
     deductions = fields.Monetary(string='Deductions', currency_field='company_currency', tracking=True, translate=True)
     payment_capacity = fields.Monetary(string='Payment capacity', currency_field='company_currency', tracking=True, translate=True)
 
     company_currency = fields.Many2one(string='Currency', related='company_id.currency_id', readonly=True, relation="res.currency")
     company_id = fields.Many2one('res.company', string='Company', index=True, default=lambda self: self.env.company.id)
-
-    # @api_depends('catlg_product')
-    # def _compute_catlg_prod(self):
-    #     for reg in self:
-    #         reg.catlg_product = reg.get('product_template_attribute_value_ids.name')
 
     @api.depends('rent','first_mortage','another_finantiation','risk_insurance','real_state_taxes','mortage_insurance','debts_cowners','other')
     def _compute_total_resident(self):

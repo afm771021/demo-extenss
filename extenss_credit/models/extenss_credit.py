@@ -295,73 +295,80 @@ class Credits(models.Model):
             now =  reg.notice_date
             new_date = now + timedelta(days=1)
             records_amortization = self.env['extenss.credit.amortization'].search([('credit_id', '=', reg.id),('expiration_date', '=', new_date)])
-            for rec in records_amortization:
-                if reg.cs == False :
-                    amount = rec.total_rent
-                else:
-                    amount = rec.payment
 
-                rec_en.create({
-                    'credit_expiry_id': reg.id,
-                    'payment_number': rec.no_pay,
-                    'due_not_date': rec.expiration_date,
-                    'amount_not': amount,
-                    'total_paid_not': 0,
-                    'total_to_pay': 0,
-                    'outstanding_balance': rec.initial_balance,
-                    'rate_moratorium': reg.factor_rate
-                    #'rent': rec.total_rent,
-                })
+            print('reg.id', reg.id)
+            print('new_date', new_date)
+            print('records_amortization.no_pay', records_amortization.no_pay)
+            val_regs = self.env['extenss.credit.expiry_notices'].search_count([('credit_expiry_id', '=', reg.id),('due_not_date', '=', new_date),('payment_number', '=', records_amortization.no_pay)])
 
-                rec_notice = self.env['extenss.credit.expiry_notices'].search([('payment_number', '=', rec.no_pay),('credit_expiry_id', '=', reg.id),('req_credit_id', '=', False)])
-                for r in rec_notice:
-                    if reg.af or reg.cs:
-                        rec_cp.create({
-                            'expiry_notice_id': r.id,
-                            'concept': 'capital',
-                            'amount_concept': rec.capital,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                    if reg.af:
-                        rec_cp.create({
-                            'expiry_notice_id': r.id,
-                            'concept': 'capvat',
-                            'amount_concept': rec.iva_capital,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                    if reg.af or reg.cs:
-                        rec_cp.create({
-                            'expiry_notice_id': r.id,
-                            'concept': 'interest',
-                            'amount_concept': rec.interest,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                        rec_cp.create({
-                            'expiry_notice_id':r.id,
-                            'concept': 'intvat',
-                            'amount_concept': rec.iva_interest,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                    if reg.ap:
-                        rec_cp.create({
-                            'expiry_notice_id': r.id,
-                            'concept': 'payment',
-                            'amount_concept': rec.payment,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                        rec_cp.create({
-                            'expiry_notice_id': r.id,
-                            'concept': 'paymentvat',
-                            'amount_concept': rec.iva_rent,
-                            'total_paid_concept': 0,
-                            'full_paid': False,
-                        })
-                reg.outstanding_balance = rec.initial_balance #08072020
+            if val_regs == 0:
+                for rec in records_amortization:
+                    if reg.cs == False and reg.dn == False:
+                        amount = rec.total_rent
+                    else:
+                        amount = rec.payment
+
+                    rec_en.create({
+                        'credit_expiry_id': reg.id,
+                        'payment_number': rec.no_pay,
+                        'due_not_date': rec.expiration_date,
+                        'amount_not': amount,
+                        'total_paid_not': 0,
+                        'total_to_pay': 0,
+                        'outstanding_balance': rec.initial_balance,
+                        'rate_moratorium': reg.factor_rate
+                        #'rent': rec.total_rent,
+                    })
+
+                    rec_notice = self.env['extenss.credit.expiry_notices'].search([('payment_number', '=', rec.no_pay),('credit_expiry_id', '=', reg.id),('req_credit_id', '=', False)])
+                    for r in rec_notice:
+                        if reg.af or reg.cs or reg.dn:
+                            rec_cp.create({
+                                'expiry_notice_id': r.id,
+                                'concept': 'capital',
+                                'amount_concept': rec.capital,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                        if reg.af:
+                            rec_cp.create({
+                                'expiry_notice_id': r.id,
+                                'concept': 'capvat',
+                                'amount_concept': rec.iva_capital,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                        if reg.af or reg.cs or reg.dn:
+                            rec_cp.create({
+                                'expiry_notice_id': r.id,
+                                'concept': 'interest',
+                                'amount_concept': rec.interest,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                            rec_cp.create({
+                                'expiry_notice_id':r.id,
+                                'concept': 'intvat',
+                                'amount_concept': rec.iva_interest,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                        if reg.ap:
+                            rec_cp.create({
+                                'expiry_notice_id': r.id,
+                                'concept': 'payment',
+                                'amount_concept': rec.payment,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                            rec_cp.create({
+                                'expiry_notice_id': r.id,
+                                'concept': 'paymentvat',
+                                'amount_concept': rec.iva_rent,
+                                'total_paid_concept': 0,
+                                'full_paid': False,
+                            })
+                    reg.outstanding_balance = rec.initial_balance #08072020
 
     credit_expiry_ids = fields.One2many('extenss.credit.expiry_notices', 'credit_expiry_id', string=' ', tracking=True)
     restructuring_ids = fields.One2many('extenss.credit.restructuring_table', 'credit_id', string=' ', tracking=True)
