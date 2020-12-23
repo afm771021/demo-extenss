@@ -205,9 +205,9 @@
     </record>
 
     <menuitem 
-    id="submenu_payment_balance_dn"
-    name="Payment balance in favor"
-    sequence="100"
-    parent="menu_dn"
-    action="action_payment_balance_dn"/>
+        id="submenu_payment_balance_dn"
+        name="Payment balance in favor"
+        sequence="100"
+        parent="menu_dn"
+        action="action_payment_balance_dn"/>
 </odoo>

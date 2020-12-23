@@ -162,7 +162,7 @@ class Credits(models.Model):
         'extenss.credit.moras', 
         'credit_id', 
         string='Moras Table')
-    notice_date = fields.Date(string=u'Expiri Notices',
+    notice_date = fields.Date(string=u'Expiry Notices',
     default=fields.Date.context_today)
     payment_date = fields.Date(string=u'Register Payment',
     default=fields.Date.context_today)
@@ -188,15 +188,15 @@ class Credits(models.Model):
         for reg in self:
             reg.overdue_balance = reg.past_due_interest + reg.expired_interest_vat + reg.overdue_capital + reg.expired_capital_vat
 
-    @api.depends('moras_ids')
+    @api.depends('credit_moras_ids')
     def _get_moras(self):
-        for r in self:
-            r.count_moras = len(r.moras_ids)
+        for reg in self:
+            reg.count_moras = len(reg.credit_moras_ids)
 
-    @api.depends('moras_ids','moras_ids.interest')
+    @api.depends('credit_moras_ids','credit_moras_ids.total_paid_moras')
     def _get_amount_moras(self):
         for reg in self:
-            reg.total_moras = sum([line.interest for line in reg.moras_ids])
+            reg.total_moras = sum([line.total_paid_moras for line in reg.credit_moras_ids])
 
     @api.model
     def create(self, reg):
@@ -2143,7 +2143,7 @@ class ExtenssCreditConciliation(models.Model):
     final_balance = fields.Monetary(string='Final balance', currency_field='company_currency', tracking=True, translate=True)
     status_bank = fields.Selection([('draft','Draft'),('pending','Pending'),('validated','Validated')], string='Status', default='draft', tracking=True, translate=True)
     processing_id = fields.Char(string='Processing id', tracking=True, translate=True)
-    type = fields.Char(string='Type', default='conciliation', tracking=True, translate=True)
+    type_conciliation = fields.Selection([('conciliation', 'Conciliation')], string='Type', default='conciliation', tracking=True, translate=True)
     company_currency = fields.Many2one(string='Currency', related='company_id.currency_id', readonly=True, relation="res.currency")
     company_id = fields.Many2one('res.company', string='Company', index=True, default=lambda self: self.env.company.id)
 
@@ -2152,7 +2152,7 @@ class ExtenssCreditConciliation(models.Model):
     def action_copy_data(self):
         ids = []
         flag_check = False
-        records = self.env['extenss.credit.conciliation'].search([('type', '=', 'conciliation'),('processing_id', '!=', False)])
+        records = self.env['extenss.credit.conciliation'].search([('type_conciliation', '=', 'conciliation'),('processing_id', '!=', False)])
         for record in records:
             id_procs = record.processing_id
             ids.append(id_procs)
@@ -2164,7 +2164,7 @@ class ExtenssCreditConciliation(models.Model):
                 'initial_balance': rec_bank.balance_start,
                 'final_balance': rec_bank.balance_end_real,
                 'processing_id': rec_bank.id,
-                'type': 'conciliation'
+                'type_conciliation': 'conciliation'
             })
 
             records_lines = self.env['account.bank.statement.line'].search([('statement_id', '=', rec_bank.id)])

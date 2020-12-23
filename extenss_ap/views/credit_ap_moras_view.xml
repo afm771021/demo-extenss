@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <record id="view_tree_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.tree</field>
+    <record id="view_tree_extenss_ap_moras" model="ir.ui.view">
+        <field name="name">extenss.ap.moras.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <tree>
@@ -23,22 +23,12 @@
         </field>
     </record>
 
-    <record id="view_form_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.form</field>
+    <record id="view_form_extenss_ap_moras" model="ir.ui.view">
+        <field name="name">extenss.ap.moras.form</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <form>
-                <header>
-                    <button name="action_new_request" string="Request" type="object" class="oe_highlight"/>
-                    <button name="copy_amortization_table" string="Restructure" type="object" class="oe_highlight"/>
-                </header>
                 <sheet>
-                    <div name="button_box" class="oe_button_box">
-                        <button class="oe_stat_button" type="object" name="open_request_count" icon="fa-bars">
-                            <field name="request_count" string="Request" widget="statinfo"/>
-                        </button>
-                    </div>
-
                     <group>
                         <div class="oe_title">
                             <div class="oe_edit_only">
@@ -167,8 +157,6 @@
                                     <field name="expiry_number" readonly="1"/>
                                     <field name="payment_number" readonly="1"/>
                                     <field name="due_not_date" readonly="1"/>
-                                    <!-- <field name="amount_not"/>
-                                    <field name="total_paid_not"/>-->
                                     <field name="total_to_pay" invisible="1"/> 
                                     <field name="start_date_mora" readonly="1"/>
                                     <field name="date_payment" attrs="{'readonly' : [('total_to_pay', '=', 0)]}"/>
@@ -178,10 +166,8 @@
                                     <field name="interest_moratoriums" readonly="1"/>
                                     <field name="vat_interest_mora" readonly="1"/>
                                     <field name="total_interest_mora" readonly="1"/>
-                                    <!-- <field name="total_payment" readonly="1"/> -->
                                     <field name="total_paid_moras" readonly="1"/>
                                     <field name="to_pay" readonly="1"/>
-                                    <!--<field name="rent" readonly="1"/>-->
                                     <field name="total_rent" readonly="1"/>
                                     <field name="total_to_pay" readonly="1"/>
                                 </tree>
@@ -253,231 +239,28 @@
                                 </form>
                             </field>
                         </page>
-                        <page string="Amortization" name="amotization">
-                            <field name="amortization_ids" options="{'no_open': True}" readonly="1" force_save="1">
-                                <tree>
-                                    <field name="no_pay"/>
-                                    <field name="expiration_date"/>
-                                    <field name="initial_balance"/>
-                                    <field name="capital"/>
-                                    <field name="interest"/>
-                                    <field name="iva_interest" attrs="{ 'column_invisible' : [('parent.ap', '=', True)]}"/>
-                                    <field name="payment"/>
-                                    <field name="iva_capital" attrs="{ 'column_invisible' : [('parent.af', '=', False)]}"/>
-                                    <field name="iva_rent" attrs="{ 'column_invisible' : [('parent.ap', '=', False)]}"/>
-                                    <field name="total_rent" attrs="{ 'column_invisible' : [('parent.cs', '=', True)]}"/>
-                                    <field name="penalty_amount"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Restructuring" name="restructuring" attrs="{'invisible' : [('portfolio_type', '!=', 'restructuring')]}">
-                            <field name="restructuring_ids" options="{'no_open': True}" readonly="1" force_save="1">
-                                <tree>
-                                    <field name="no_pay"/>
-                                    <field name="expiration_date"/>
-                                    <field name="initial_balance"/>
-                                    <field name="capital"/>
-                                    <field name="interest"/>
-                                    <field name="iva_interest" attrs="{ 'column_invisible' : [('parent.ap', '=', True)]}"/>
-                                    <field name="payment"/>
-                                    <field name="iva_capital" attrs="{ 'column_invisible' : [('parent.af', '=', False)]}"/>
-                                    <field name="iva_rent" attrs="{ 'column_invisible' : [('parent.ap', '=', False)]}"/>
-                                    <field name="total_rent" attrs="{ 'column_invisible' : [('parent.cs', '=', True)]}"/>
-                                    <field name="penalty_amount"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Expiry notices" name="expiry_notices">
-                            <field name="credit_expiry_ids">
-                                <tree>
-                                    <field name="expiry_number"/>
-                                    <field name="payment_number"/>
-                                    <field name="due_not_date"/>
-                                    <field name="total_paid_moras"/>
-                                    <field name="amount_not"/>
-                                    <field name="total_paid_not"/>
-                                    <field name="total_to_pay"/>
-                                </tree>
-                                <form>
-                                    <sheet>
-                                        <group>
-                                            <group>
-                                                <field name="expiry_number"/>
-                                                <field name="payment_number"/>
-                                                <field name="due_not_date"/>
-                                                <field name="payment_date"/>
-                                            </group>
-                                            <group>
-                                                <field name="total_paid_moras"/>
-                                                <field name="amount_not"/>
-                                                <field name="total_paid_not"/>
-                                                <field name="total_to_pay"/>
-                                            </group>
-                                        </group>
-                                        <group>
-                                            <notebook>
-                                                <page name="concepts_expiration" string="Concepts Expiration Notices">
-                                                    <field name="expiry_notice_ids">
-                                                        <tree>
-                                                            <field name="concept"/>
-                                                            <field name="amount_concept"/>
-                                                            <field name="total_paid_concept"/>
-                                                            <field name="full_paid"/>
-                                                        </tree>
-                                                        <form>
-                                                            <group>
-                                                                <group>
-                                                                    <field name="concept" />
-                                                                    <field name="amount_concept"/>
-                                                                </group>
-                                                                <group>
-                                                                    <field name="total_paid_concept"/>
-                                                                    <field name="full_paid"/>
-                                                                </group>
-                                                            </group>
-                                                            <group>
-                                                                <field name="concept_pay_ids" string="Payments" options="{'no_create_edit': False},
-                                                                {'no_quick_create': False},
-                                                                {'no_open': False}">
-                                                                    <tree open="false">
-                                                                        <field name="expiry_number_en"/>
-                                                                        <field name="date_paid"/>
-                                                                        <field name="total_paid_cp"/>
-                                                                    </tree>
-                                                                    <form>
-                                                                        <group>
-                                                                            <group>
-                                                                                <field name="expiry_number_en"/>
-                                                                                <field name="date_paid"/>
-                                                                            </group>
-                                                                            <group>
-                                                                                <field name="total_paid_cp"/>
-                                                                            </group>
-                                                                        </group>
-                                                                    </form>
-                                                                </field>
-                                                            </group>
-                                                        </form>
-                                                    </field>
-                                                </page>
-                                            </notebook>
-                                        </group>
-                                    </sheet>
-                                </form>
-                            </field>
-                        </page>
-                        <page string="Condonation" name="condonation">
-                            <form>
-                                <header>
-                                    <button name="action_condonation" string="Condonation" type="object" class="oe_highlight"/>
-                                </header>
-                            </form>
-                            <field name="credit_condonation_ids" >
-                                <tree editable="bottom">
-                                    <field name="expiry_number" readonly="1"/>
-                                    <field name="payment_number" readonly="1"/>
-                                    <field name="due_not_date" readonly="1"/>
-                                    <field name="total_to_pay" invisible="1"/>
-                                    <field name="start_date_mora" readonly="1"/>
-                                    <field name="date_payment" readonly="1"/>
-                                    <field name="outstanding_balance" readonly="1"/>
-                                    <field name="rate_moratorium" readonly="1"/>
-                                    <field name="days_mora" readonly="1"/>
-                                    <field name="interest_moratoriums" readonly="1"/>
-                                    <field name="vat_interest_mora" readonly="1"/>
-                                    <field name="total_interest_mora" readonly="1"/>
-                                    <field name="balance_interest_mora" readonly="1"/>
-                                    <field name="amount_condonation" attrs="{'readonly' : [('total_to_pay', '=', 0)]}"/>
-                                </tree>
-                                <form>
-                                    <sheet>
-                                        <group>
-                                            <group>
-                                                <field name="expiry_number"/>
-                                                <field name="payment_number"/>
-                                                <field name="due_not_date"/>
-                                                <field name="payment_date"/>
-                                            </group>
-                                            <group>
-                                                <field name="amount_not"/>
-                                                <field name="total_paid_not"/>
-                                                <field name="total_to_pay"/>
-                                            </group>
-                                        </group>
-                                        <group>
-                                            <notebook>
-                                                <page name="concepts_expiration" string="Concepts Expiration Notices">
-                                                    <field name="expiry_notice_ids">
-                                                        <tree>
-                                                            <field name="concept"/>
-                                                            <field name="amount_concept"/>
-                                                            <field name="total_paid_concept"/>
-                                                            <field name="full_paid"/>
-                                                        </tree>
-                                                        <form>
-                                                            <group>
-                                                                <group>
-                                                                    <field name="concept" />
-                                                                    <field name="amount_concept"/>
-                                                                </group>
-                                                                <group>
-                                                                    <field name="total_paid_concept"/>
-                                                                    <field name="full_paid"/>
-                                                                </group>
-                                                            </group>
-                                                            <group>
-                                                                <field name="concept_pay_ids" string="Payments" options="{'no_create_edit': False},
-                                                                {'no_quick_create': False},
-                                                                {'no_open': False}">
-                                                                    <tree open="false">
-                                                                        <field name="expiry_number_en"/>
-                                                                        <field name="date_paid"/>
-                                                                        <field name="total_paid_cp"/>
-                                                                    </tree>
-                                                                    <form>
-                                                                        <group>
-                                                                            <group>
-                                                                                <field name="expiry_number_en"/>
-                                                                                <field name="date_paid"/>
-                                                                            </group>
-                                                                            <group>
-                                                                                <field name="total_paid_cp"/>
-                                                                            </group>
-                                                                        </group>
-                                                                    </form>
-                                                                </field>
-                                                            </group>
-                                                        </form>
-                                                    </field>
-                                                </page>
-                                            </notebook>
-                                        </group>
-                                    </sheet>
-                                </form>
-                            </field>
-                        </page>
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="action_accounting_portfolio" model="ir.actions.act_window">
-        <field name="name">Accounting Portfolio</field>
+    <record id="action_moras_ap" model="ir.actions.act_window">
+        <field name="name">Moras</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">extenss.credit</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('af', '=', True)]</field>
+        <field name="domain">[('ap', '=', True)]</field>
         <field name="view_ids"
-            eval="[(5,0,0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_af.view_tree_extenss_af_acct_portfolio')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_af.view_form_extenss_af_acct_portfolio')})]"/>
+                eval="[(5,0,0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_ap.view_tree_extenss_ap_moras')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_ap.view_form_extenss_ap_moras')})]"/>
     </record>
 
     <menuitem 
-        id="submenu_accounting_portfolio"
-        name="Accounting Portfolio"
-        sequence="80"
-        parent="menu_af"
-        action="action_accounting_portfolio"/>
+    id="submenu_moras_ap"
+    name="Moras"
+    sequence="70"
+    parent="menu_ap"
+    action="action_moras_ap"/>
 </odoo>

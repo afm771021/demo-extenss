@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <record id="view_tree_extenss_dn_dispersion" model="ir.ui.view">
-        <field name="name">extenss.dn.tree.dispersion</field>
+    <record id="view_tree_extenss_ap_initial_pay_req" model="ir.ui.view">
+        <field name="name">extenss.ap.tree.req</field>
         <field name="model">crm.lead</field>
         <field name="arch" type="xml">
             <tree create="false">
@@ -13,8 +13,8 @@
         </field>
     </record>
 
-    <record id="view_form_extenss_dn_dispersion" model="ir.ui.view">
-        <field name="name">extenss.dn.form.dispersion</field>
+    <record id="view_form_extenss_ap_initial_pay_req" model="ir.ui.view">
+        <field name="name">extenss.ap.form.req</field>
         <field name="model">crm.lead</field>
         <field name="arch" type="xml">
             <form create="false">
@@ -89,22 +89,22 @@
         </field>
     </record>
 
-    <record id="action_dispersion_dn" model="ir.actions.act_window">
-        <field name="name">Dispersion</field>
+    <record id="action_initial_pay_req_ap" model="ir.actions.act_window">
+        <field name="name">Initial Pay</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">crm.lead</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('stage_id', '=', 5),('dn_s', '=', True)]</field>
+        <field name="domain">[('stage_id', '=', 5),('flag_initial_payment', '=', False),('ap_s', '=', True)]</field>
         <field name="view_ids"
                 eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_dn.view_tree_extenss_dn_dispersion')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_dn.view_form_extenss_dn_dispersion')})]"/>
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_ap.view_tree_extenss_ap_initial_pay_req')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_ap.view_form_extenss_ap_initial_pay_req')})]"/>
     </record>
 
     <menuitem 
-        id="submenu_dispersion_dn"
-        name="Dispersion"
+        id="submenu_initial_pay_ap"
+        name="Initial Pay"
         sequence="10"
-        parent="menu_dn"
-        action="action_dispersion_dn"/>
+        parent="menu_ap"
+        action="action_initial_pay_req_ap"/>
 </odoo>

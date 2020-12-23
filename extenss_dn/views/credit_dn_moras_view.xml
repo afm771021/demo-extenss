@@ -245,11 +245,38 @@
         </field>
     </record>
 
+    <record id="view_tree_extenss_dn_moras_search" model="ir.ui.view">
+        <field name="name">extenss.dn.moras.search</field>
+        <field name="model">extenss.credit</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="credit_id"/>
+                <field name="customer_id"/>
+                <field name="request_id"/>
+                <field name="product_id"/>
+                <field name="salesperson_id"/>
+                <field name="office_id"/>
+                <field name="anchor_id"/>
+                <field name="bill_id"/>
+                <field name="customer_type"/>
+                <field name="amount_financed"/>
+                <field name="type_credit"/>
+                <field name="frequency"/>
+                <field name="interest_rate"/>
+                <field name="term"/>
+                <!-- <filter string="1 Days" name="days_15"  domain="[('create_date', '>', 'account_status_date')]"/>
+                <filter string="2 Days" name="days_30"  domain="[('create_date', '>', 'account_status_date')]"/>
+                <filter string="3 Days" name="days_90"  domain="[('create_date', '>', 'account_status_date')]"/> -->
+            </search>
+        </field>
+    </record>
+
     <record id="action_moras_dn" model="ir.actions.act_window">
         <field name="name">Moras</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">extenss.credit</field>
         <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_tree_extenss_dn_moras_search"/>
         <field name="domain">[('dn', '=', True)]</field>
         <field name="view_ids"
                 eval="[(5,0,0),
@@ -258,9 +285,9 @@
     </record>
 
     <menuitem 
-    id="submenu_moras_dn"
-    name="Moras"
-    sequence="70"
-    parent="menu_dn"
-    action="action_moras_dn"/>
+        id="submenu_moras_dn"
+        name="Moras"
+        sequence="70"
+        parent="menu_dn"
+        action="action_moras_dn"/>
 </odoo>
