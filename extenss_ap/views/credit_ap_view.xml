@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <record id="view_tree_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.tree</field>
+    <record id="view_tree_extenss_ap" model="ir.ui.view">
+        <field name="name">extenss.ap.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <tree>
@@ -23,8 +23,8 @@
         </field>
     </record>
 
-    <record id="view_form_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.form</field>
+    <record id="view_form_extenss_ap" model="ir.ui.view">
+        <field name="name">extenss.ap.form</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <form>
@@ -38,7 +38,6 @@
                             <field name="request_count" string="Request" widget="statinfo"/>
                         </button>
                     </div>
-
                     <group>
                         <div class="oe_title">
                             <div class="oe_edit_only">
@@ -167,8 +166,6 @@
                                     <field name="expiry_number" readonly="1"/>
                                     <field name="payment_number" readonly="1"/>
                                     <field name="due_not_date" readonly="1"/>
-                                    <!-- <field name="amount_not"/>
-                                    <field name="total_paid_not"/>-->
                                     <field name="total_to_pay" invisible="1"/> 
                                     <field name="start_date_mora" readonly="1"/>
                                     <field name="date_payment" attrs="{'readonly' : [('total_to_pay', '=', 0)]}"/>
@@ -178,10 +175,8 @@
                                     <field name="interest_moratoriums" readonly="1"/>
                                     <field name="vat_interest_mora" readonly="1"/>
                                     <field name="total_interest_mora" readonly="1"/>
-                                    <!-- <field name="total_payment" readonly="1"/> -->
                                     <field name="total_paid_moras" readonly="1"/>
                                     <field name="to_pay" readonly="1"/>
-                                    <!--<field name="rent" readonly="1"/>-->
                                     <field name="total_rent" readonly="1"/>
                                     <field name="total_to_pay" readonly="1"/>
                                 </tree>
@@ -339,7 +334,7 @@
                                                                 <field name="concept_pay_ids" string="Payments" options="{'no_create_edit': False},
                                                                 {'no_quick_create': False},
                                                                 {'no_open': False}">
-                                                                    <tree open="false">
+                                                                    <tree open="false"><!--create="1" edit="1">-->
                                                                         <field name="expiry_number_en"/>
                                                                         <field name="date_paid"/>
                                                                         <field name="total_paid_cp"/>
@@ -462,22 +457,98 @@
         </field>
     </record>
 
-    <record id="action_accounting_portfolio" model="ir.actions.act_window">
-        <field name="name">Accounting Portfolio</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">extenss.credit</field>
-        <field name="view_mode">tree,form</field>
-        <field name="domain">[('af', '=', True)]</field>
-        <field name="view_ids"
-            eval="[(5,0,0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_af.view_tree_extenss_af_acct_portfolio')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_af.view_form_extenss_af_acct_portfolio')})]"/>
+    <record id="view_tree_extenss_ap_initial_pay" model="ir.ui.view">
+        <field name="name">extenss.ap.tree</field>
+        <field name="model">extenss.credit</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="credit_id"/>
+                <field name="customer_id"/>
+                <field name="request_id"/>
+                <field name="product_id"/>
+                <field name="salesperson_id"/>
+                <field name="office_id"/>
+                <field name="anchor_id"/>
+                <field name="bill_id"/>
+                <field name="customer_type"/>
+                <field name="amount_financed"/>
+                <field name="type_credit"/>
+                <field name="frequency"/>
+                <field name="interest_rate"/>
+                <field name="term"/>
+            </tree>
+        </field>
     </record>
 
+    <record id="extenss_ap_calendar" model="ir.ui.view">
+        <field name="name">extenss.ap.calendar</field>
+        <field name="model">extenss.credit</field>
+        <field name="arch" type="xml">
+            <calendar string="Credit Calendar" date_start="hiring_date" color="credit_id" mode="month" quick_add="False">
+                <field name="name"/>
+                <field name="credit_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- <record id="extenss_credit_conciliation_lines_tree" model="ir.ui.view">
+        <field name="name">extenss.credit.conciliation.lines.tree</field>
+        <field name="model">extenss.credit.conciliation_lines</field>
+        <field name="arch" type="xml">
+            <tree create="false">
+                <field name="check"/>
+                <field name="customer"/>
+                <field name="reference"/>
+                <field name="date"/>
+                <field name="amount"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="extenss_credit_conciliation_lines_search" model="ir.ui.view">
+        <field name="name">extenss.credit.conciliation.lines.search</field>
+        <field name="model">extenss.credit.conciliation_lines</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer"/>
+                <field name="reference"/>
+                <field name="amount"/>
+            </search>
+        </field>
+    </record> -->
+
+    <record id="action_extenss_ap" model="ir.actions.act_window">
+        <field name="name">Financial leasing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">extenss.credit</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="domain">[('ap', '=', True)]</field>
+        <field name="view_ids"
+                eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_ap.view_tree_extenss_ap')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_ap.view_form_extenss_ap')})]"/>
+    </record>
+
+    <!-- <record id="action_conciliation_ap" model="ir.actions.act_window">
+        <field name="name">Conciliation</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">extenss.credit.conciliation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('company_id', '=', '1')]</field>
+        
+    </record> -->
+
     <menuitem 
-        id="submenu_accounting_portfolio"
-        name="Accounting Portfolio"
-        sequence="80"
-        parent="menu_af"
-        action="action_accounting_portfolio"/>
+        id="menu_ap" 
+        name="Pure lease" 
+        sequence="0" 
+        web_icon="extenss_af,static/description/icon.png"/>
+
+    <menuitem 
+        id="menu_extenss_ap"  
+        name="Pure lease"
+        sequence="5" 
+        parent="menu_ap" 
+        action="action_extenss_ap"/>
 </odoo>

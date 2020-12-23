@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <odoo>
-    <record id="view_tree_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.tree</field>
+    <record id="view_tree_extenss_ap_acct_portfolio" model="ir.ui.view">
+        <field name="name">extenss.ap.acct.portfolio.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <tree>
@@ -23,8 +23,8 @@
         </field>
     </record>
 
-    <record id="view_form_extenss_af_acct_portfolio" model="ir.ui.view">
-        <field name="name">extenss.af.acct.portfolio.form</field>
+    <record id="view_form_extenss_ap_acct_portfolio" model="ir.ui.view">
+        <field name="name">extenss.ap.acct.portfolio.form</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <form>
@@ -167,8 +167,6 @@
                                     <field name="expiry_number" readonly="1"/>
                                     <field name="payment_number" readonly="1"/>
                                     <field name="due_not_date" readonly="1"/>
-                                    <!-- <field name="amount_not"/>
-                                    <field name="total_paid_not"/>-->
                                     <field name="total_to_pay" invisible="1"/> 
                                     <field name="start_date_mora" readonly="1"/>
                                     <field name="date_payment" attrs="{'readonly' : [('total_to_pay', '=', 0)]}"/>
@@ -178,10 +176,8 @@
                                     <field name="interest_moratoriums" readonly="1"/>
                                     <field name="vat_interest_mora" readonly="1"/>
                                     <field name="total_interest_mora" readonly="1"/>
-                                    <!-- <field name="total_payment" readonly="1"/> -->
                                     <field name="total_paid_moras" readonly="1"/>
                                     <field name="to_pay" readonly="1"/>
-                                    <!--<field name="rent" readonly="1"/>-->
                                     <field name="total_rent" readonly="1"/>
                                     <field name="total_to_pay" readonly="1"/>
                                 </tree>
@@ -462,22 +458,22 @@
         </field>
     </record>
 
-    <record id="action_accounting_portfolio" model="ir.actions.act_window">
+    <record id="action_accounting_portfolio_ap" model="ir.actions.act_window">
         <field name="name">Accounting Portfolio</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">extenss.credit</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('af', '=', True)]</field>
+        <field name="domain">[('ap', '=', True)]</field>
         <field name="view_ids"
             eval="[(5,0,0),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_af.view_tree_extenss_af_acct_portfolio')}),
-            (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_af.view_form_extenss_af_acct_portfolio')})]"/>
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_ap.view_tree_extenss_ap_acct_portfolio')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_ap.view_form_extenss_ap_acct_portfolio')})]"/>
     </record>
 
-    <menuitem 
-        id="submenu_accounting_portfolio"
-        name="Accounting Portfolio"
-        sequence="80"
-        parent="menu_af"
-        action="action_accounting_portfolio"/>
+    <menuitem
+    id="submenu_accounting_portfolio_ap"
+    name="Accounting Portfolio"
+    sequence="80"
+    parent="menu_ap"
+    action="action_accounting_portfolio_ap"/>
 </odoo>

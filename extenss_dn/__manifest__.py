@@ -24,6 +24,7 @@
         'views/credit_dn_payment_balance_view.xml',
         'views/credit_dn_condonation_view.xml',
         'views/credit_dn_conciliation_view.xml',
+        'views/credit_dn_dispersion_con_view.xml',
         # 'views/credit_af_statement_account_view.xml',
         #'views/dashboard.xml',
         ],

@@ -4,7 +4,7 @@
         <field name="name">extenss.af.statement.account.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
-            <tree><!--create="false" edit="false"-->
+            <tree>
                 <field name="credit_id"/>
                 <field name="customer_id"/>
                 <field name="request_id"/>

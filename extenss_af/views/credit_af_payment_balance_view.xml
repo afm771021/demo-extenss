@@ -503,7 +503,7 @@
         <field name="name">extenss.af.payment.balance.search</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
-            <search><!--create="false" edit="false"-->
+            <search>
                 <field name="credit_id"/>
                 <field name="customer_id"/>
                 <field name="request_id"/>
@@ -539,9 +539,9 @@
     </record>
 
     <menuitem 
-    id="submenu_payment_balance"
-    name="Payment balance in favor"
-    sequence="100"
-    parent="menu_af"
-    action="action_payment_balance"/>
+        id="submenu_payment_balance"
+        name="Payment balance in favor"
+        sequence="100"
+        parent="menu_af"
+        action="action_payment_balance"/>
 </odoo>

@@ -4,7 +4,7 @@
         <field name="name">extenss.af.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
-            <tree><!--create="false" edit="false"-->
+            <tree>
                 <field name="credit_id"/>
                 <field name="customer_id"/>
                 <field name="request_id"/>
@@ -167,8 +167,6 @@
                                     <field name="expiry_number" readonly="1"/>
                                     <field name="payment_number" readonly="1"/>
                                     <field name="due_not_date" readonly="1"/>
-                                    <!-- <field name="amount_not"/>
-                                    <field name="total_paid_not"/>-->
                                     <field name="total_to_pay" invisible="1"/> 
                                     <field name="start_date_mora" readonly="1"/>
                                     <field name="date_payment" attrs="{'readonly' : [('total_to_pay', '=', 0)]}"/>
@@ -178,10 +176,8 @@
                                     <field name="interest_moratoriums" readonly="1"/>
                                     <field name="vat_interest_mora" readonly="1"/>
                                     <field name="total_interest_mora" readonly="1"/>
-                                    <!-- <field name="total_payment" readonly="1"/> -->
                                     <field name="total_paid_moras" readonly="1"/>
                                     <field name="to_pay" readonly="1"/>
-                                    <!--<field name="rent" readonly="1"/>-->
                                     <field name="total_rent" readonly="1"/>
                                     <field name="total_to_pay" readonly="1"/>
                                 </tree>
@@ -288,7 +284,7 @@
                             </field>
                         </page>
                         <page string="Expiry notices" name="expiry_notices">
-                            <field name="credit_expiry_ids" ><!--readonly="1"-->
+                            <field name="credit_expiry_ids">
                                 <tree>
                                     <field name="expiry_number"/>
                                     <field name="payment_number"/>
@@ -320,7 +316,6 @@
                                                     <field name="expiry_notice_ids">
                                                         <tree>
                                                             <field name="concept"/>
-                                                            <!-- <field name="expiry_num"/> -->
                                                             <field name="amount_concept"/>
                                                             <field name="total_paid_concept"/>
                                                             <field name="full_paid"/>
@@ -340,7 +335,7 @@
                                                                 <field name="concept_pay_ids" string="Payments" options="{'no_create_edit': False},
                                                                 {'no_quick_create': False},
                                                                 {'no_open': False}">
-                                                                    <tree open="false"><!--create="1" edit="1">-->
+                                                                    <tree open="false">
                                                                         <field name="expiry_number_en"/>
                                                                         <field name="date_paid"/>
                                                                         <field name="total_paid_cp"/>
@@ -378,8 +373,6 @@
                                     <field name="expiry_number" readonly="1"/>
                                     <field name="payment_number" readonly="1"/>
                                     <field name="due_not_date" readonly="1"/>
-                                    <!-- <field name="amount_not"/>
-                                    <field name="total_paid_not"/>-->
                                     <field name="total_to_pay" invisible="1"/>
                                     <field name="start_date_mora" readonly="1"/>
                                     <field name="date_payment" readonly="1"/>
@@ -469,7 +462,7 @@
         <field name="name">extenss.af.tree</field>
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
-            <tree><!--create="false" edit="false"-->
+            <tree>
                 <field name="credit_id"/>
                 <field name="customer_id"/>
                 <field name="request_id"/>
@@ -488,13 +481,11 @@
         </field>
     </record>
 
-    
-
     <record id="view_tree_extenss_af_initial_pay_req" model="ir.ui.view">
         <field name="name">extenss.af.tree.req</field>
         <field name="model">crm.lead</field>
         <field name="arch" type="xml">
-            <tree create="false"><!--create="false" edit="false"-->
+            <tree create="false">
                 <field name="partner_id"/>
                 <field name="stage_id"/>
                 <field name="planned_revenue"/>
@@ -507,7 +498,7 @@
         <field name="name">extenss.af.form.req</field>
         <field name="model">crm.lead</field>
         <field name="arch" type="xml">
-            <form create="false"><!--create="false" edit="false"-->
+            <form create="false">
                 <sheet>
                     <group>
                         <field name="name" readonly="1"/>
@@ -519,8 +510,7 @@
                         <field name="productid" invisible="1"/>
                     </group>
                     <group>
-                        <!-- <field name="product_id"/> -->
-                        <field name="sale_order_ids" readonly="1"><!-- nolabel="1"-->
+                        <field name="sale_order_ids" readonly="1">
                             <tree create="false">
                                 <field name="state" invisible="1"/>
                                 <field name="name"/>
@@ -640,7 +630,6 @@
                 eval="[(5, 0, 0),
                 (0, 0, {'view_mode': 'tree', 'view_id': ref('extenss_af.view_tree_extenss_af_initial_pay_req')}),
                 (0, 0, {'view_mode': 'form', 'view_id': ref('extenss_af.view_form_extenss_af_initial_pay_req')})]"/>
-        <!-- <field name="view_id" ref="view_tree_extenss_af_initial_pay_req"/> -->
     </record>
 
     <record id="action_conciliation" model="ir.actions.act_window">

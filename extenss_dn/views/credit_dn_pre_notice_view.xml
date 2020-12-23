@@ -28,16 +28,7 @@
         <field name="model">extenss.credit</field>
         <field name="arch" type="xml">
             <form>
-                <!-- <header>
-                    <button name="action_new_request" string="Request" type="object" class="oe_highlight"/>
-                </header> -->
                 <sheet>
-                    <!-- <div name="button_box" class="oe_button_box">
-                        <button class="oe_stat_button" type="object" name="open_request_count" icon="fa-bars">
-                            <field name="request_count" string="Request" widget="statinfo"/>
-                        </button>
-                    </div> -->
-
                     <group>
                         <div class="oe_title">
                             <div class="oe_edit_only">
@@ -276,12 +267,46 @@
                 <field name="frequency"/>
                 <field name="interest_rate"/>
                 <field name="term"/>
-                <filter string="15 Days" name="days_15"  domain="[('create_date', '>', 15)]"/>
-                <filter string="30 Days" name="days_30"  domain="[('create_date', '>', 30)]"/>
-                <filter string="90 Days" name="days_90"  domain="[('create_date', '>', 90)]"/>
+                <filter string="15 Days" name="days_15"  domain="[('create_date','&gt;', (context_today() + datetime.timedelta(days=15)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="30 Days" name="days_30"  domain="[('create_date','&gt;', (context_today() + datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="120 Days" name="days_120"  domain="[('create_date','&gt;', (context_today() + datetime.timedelta(days=120)).strftime('%%Y-%%m-%%d'))]"/>
+                <!-- <filter string="30 Days" name="days_30"  domain="[('create_date', '>', 30)]"/>
+                <filter string="90 Days" name="days_90"  domain="[('create_date', '>', 90)]"/> -->
+            
+            <!--<filter string="Completed Last 365 Days" name="completion_date" domain="[
+                        ('date', '>=', (datetime.datetime.combine(context_today() + relativedelta(days=-365), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date', '&lt;', (datetime.datetime.combine(context_today(), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"/>-->
+            
+            <!--<filter string="Last 7 days" name="last_7days" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Last 30 days" name="last_month" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>-->
+
             </search>
         </field>
     </record>
+
+    <!--<record id="view_tree_extenss_dn_pre_notice_search" model="ir.ui.view">
+        <field name="name">extenss.dn.pre.notice.search</field>
+        <field name="model">extenss.credit.amortization</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="credit_id"/>
+                <field name="expiration_date"/>
+                <filter string="15 Days" name="days_15"  domain="[('expiration_date','&gt;', (context_today() + datetime.timedelta(days=15)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="30 Days" name="days_30"  domain="[('expiration_date','&gt;', (context_today() + datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="120 Days" name="days_120"  domain="[('expiration_date','&gt;', (context_today() + datetime.timedelta(days=120)).strftime('%%Y-%%m-%%d'))]"/> -->
+                <!-- <filter string="30 Days" name="days_30"  domain="[('create_date', '>', 30)]"/>
+                <filter string="90 Days" name="days_90"  domain="[('create_date', '>', 90)]"/> -->
+            
+            <!--<filter string="Completed Last 365 Days" name="completion_date" domain="[
+                        ('date', '>=', (datetime.datetime.combine(context_today() + relativedelta(days=-365), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date', '&lt;', (datetime.datetime.combine(context_today(), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"/>-->
+            
+            <!--<filter string="Last 7 days" name="last_7days" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=7)).strftime('%%Y-%%m-%%d'))]"/>
+                <filter string="Last 30 days" name="last_month" domain="[('create_date','&gt;', (context_today() - datetime.timedelta(days=30)).strftime('%%Y-%%m-%%d'))]"/>-->
+
+            <!-- </search>
+        </field>
+    </record> -->
 
     <record id="action_pre_notice_dn" model="ir.actions.act_window">
         <field name="name">Pre Notice</field>
@@ -297,9 +322,9 @@
     </record>
 
     <menuitem 
-    id="submenu_pre_notice_dn"
-    name="Pre-notice"
-    sequence="20"
-    parent="menu_dn"
-    action="action_pre_notice_dn"/>
+        id="submenu_pre_notice_dn"
+        name="Pre-notice"
+        sequence="20"
+        parent="menu_dn"
+        action="action_pre_notice_dn"/>
 </odoo>
