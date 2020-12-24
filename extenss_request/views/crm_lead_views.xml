@@ -102,7 +102,8 @@
                 <field name="sequence_stage" invisible="1"/>
                 <field name="btn_active" invisible="1"/>
                 <field name="flag_documents"/>
-                <field name="flag_initial_payment"/>
+                <field name="flag_initial_payment" attrs="{'invisible': [('product_name', '=', 'dn')]}"/>
+                <field name="flag_dispersion" attrs="{'invisible': [('product_name', '!=', 'dn')]}"/>
                 <field name="ref_number"/>
                 <!-- <field name="product_id" readonly="1"/> -->
                 <!--><field name="id"/><-->
