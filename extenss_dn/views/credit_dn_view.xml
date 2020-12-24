@@ -519,6 +519,7 @@
                         <aggregate name="contacts" string="Contacts" group_operator="count" field="customer_id" measure="__count__"/>
                         <aggregate name="count_moras" string="Count Moras" group_operator="count" field="count_moras" measure="__count__"/>
                         <aggregate name="total_moras" string="Total Moras" field="total_moras" widget="monetary"/>
+                        <aggregate name="total_paid" string="Total Paid" field="total_paid"/>
                         <!--<aggregate name="prorated_revenue_aggregate" field="expected_revenue" invisible="1"/>
                         <formula name="prorated_revenue" string="Prorated Revenue" value="record.prorated_revenue_aggregate" widget="monetary"/>
                         <formula name="deal_size" string="Average Deal Size" value="record.expected_revenue_aggregate / record.opportunities" widget="monetary"/>

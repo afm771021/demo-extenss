@@ -3,6 +3,13 @@ from odoo.exceptions import Warning, UserError, ValidationError
 
 from datetime import datetime, date
 
+CONCEPT = [
+    ('pay_initial','Pay Initial'),
+    ('pay_notice','Pay Notice'),
+    ('early_set','Early Settlement'),
+    ('dispersion', 'Collection'),
+]
+
 class Datamart(models.Model):
     _name = 'extenss.datamart'
     _description = 'Datamart'
@@ -226,5 +233,5 @@ class ExtenssDatamartConfiguration(models.Model):
     _name = 'extenss.datamart.configuration'
     _description = 'Datamart Configuration'
 
-    concept = fields.Selection([('pay_initial','Pay Initial'),('pay_notice','Pay Notice'),('early_set','Early Settlement')], string='Concept')
+    concept = fields.Selection(CONCEPT, string='Concept')
     event_id =fields.Many2many('extenss.datamart.contable_events', 'configuration_events', string='Events', tracking=True, translate=True)

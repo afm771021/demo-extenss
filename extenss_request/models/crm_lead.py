@@ -142,9 +142,15 @@ class Lead(models.Model):
                     self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
                 else:
                     raise ValidationError(_('Initial payment is missing'))
-            elif cs == True or dn == True:
+            elif cs == True:
                 self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
+            elif dn == True:
+                if self.flag_dispersion == True:
+                    self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
+                else:
+                    raise ValidationError(_('Dispersion is missing'))
         if self.stage_id.id == self.env['crm.stage'].search([('sequence', '=', '4')]).id:
+            self.send_notification()
             self.stage_id = self.env['crm.stage'].search([('sequence', '=', '5')]).id
         if self.stage_id.id == self.env['crm.stage'].search([('sequence', '=', '3')]).id:
             if self.flag_documents == False:
@@ -526,6 +532,17 @@ class Lead(models.Model):
     def action_calculate_pc(self):
         self.payment_capacity = (self.perceptions - self.deductions) * .80
 
+    def send_notification(self):
+        body_html = _('<p>Solicitud: %s ,</p><p>Cliente: %s ,</p><p>Monto: %s ,</p>') % (self.name, self.partner_id.name, self.planned_revenue)
+        mail_value = {
+                    'subject': 'Dispersion',
+                    'body_html': body_html,
+                    'email_to': self.email_from,
+                    'email_from': 'odoo@odoo.com',
+                    #'attachment_ids': [(6,0,[att.id])],
+                }
+        self.env['mail.mail'].sudo().create(mail_value).send()
+
     destination_id = fields.Many2one('extenss.request.destination', string='Destination loan', tracking=True, translate=True)
     name = fields.Char(string='Request number', required=True, copy=False, readonly=True, index=True, tracking=True, translate=True, default=lambda self: _('New'))
     sales_channel_id = fields.Many2one('extenss.request.sales_channel_id', string='Sales channel', tracking=True, translate=True)
@@ -573,6 +590,7 @@ class Lead(models.Model):
     perceptions = fields.Monetary(string='Perceptions', currency_field='company_currency', tracking=True, translate=True)
     deductions = fields.Monetary(string='Deductions', currency_field='company_currency', tracking=True, translate=True)
     payment_capacity = fields.Monetary(string='Payment capacity', currency_field='company_currency', tracking=True, translate=True)
+    flag_dispersion = fields.Boolean(string='Dispersion', default=False, tracking=True, translate=True)
 
     company_currency = fields.Many2one(string='Currency', related='company_id.currency_id', readonly=True, relation="res.currency")
     company_id = fields.Many2one('res.company', string='Company', index=True, default=lambda self: self.env.company.id)
