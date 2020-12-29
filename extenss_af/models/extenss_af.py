@@ -417,7 +417,7 @@ class ExtenssAF(models.Model):
 class ExtenssLead(models.Model):
     _inherit = 'crm.lead'
 
-    sale_order_ids = fields.One2many('sale.order', 'opportunity_id', string='Orders')
+    sale_order_ids = fields.One2many('sale.order', 'opportunity_id', string='Orders', domain=lambda self:[('state','=','sale')])
     af_s = fields.Boolean(related='sale_order_ids.af')
     productid = fields.Many2one(related='sale_order_ids.product_id')
     conciliation_lines_ids = fields.Many2many('extenss.credit.conciliation_lines', string='Payment')#,  default=_default_conciliation)

@@ -429,7 +429,7 @@ class ExtenssDN(models.Model):
 class ExtenssLead(models.Model):
     _inherit = 'crm.lead'
 
-    sale_order_ids = fields.One2many('sale.order', 'opportunity_id', string='Orders')
+    sale_order_ids = fields.One2many('sale.order', 'opportunity_id', string='Orders', domain=lambda self:[('state','=','sale')])
     af_s = fields.Boolean(related='sale_order_ids.af')
     dn_s = fields.Boolean(related='sale_order_ids.dn')
     productid = fields.Many2one(related='sale_order_ids.product_id')
@@ -441,35 +441,38 @@ class ExtenssLead(models.Model):
         #print('entra a metodo')
         list_data = []
         regs_conf = self.env['extenss.datamart.configuration'].search([('concept', '=', 'dispersion')])
-        for reg_conf in regs_conf:
-            for reg_events in reg_conf.event_id:
-                event_key = reg_events.event_key
-                for reg_order in self.sale_order_ids:
+        if regs_conf:
+            for reg_conf in regs_conf:
+                for reg_events in reg_conf.event_id:
+                    event_key = reg_events.event_key
+                    for reg_order in self.sale_order_ids:
 
-                    # print(reg_order.total_deposit)
-                    # if reg_order.total_deposit > 0 and event_key == 120:
-                    #     amount = reg_order.total_deposit
-                    # print(reg_order.total_guarantee)
-                    # if reg_order.total_guarantee > 0 and event_key == 140:
-                    #     amount = reg_order.total_guarantee
-                    # print(reg_order.total_commision)
-                    # if reg_order.total_commision > 0 and event_key == 210:
-                    #     amount = reg_order.total_commision
+                        # print(reg_order.total_deposit)
+                        # if reg_order.total_deposit > 0 and event_key == 120:
+                        #     amount = reg_order.total_deposit
+                        # print(reg_order.total_guarantee)
+                        # if reg_order.total_guarantee > 0 and event_key == 140:
+                        #     amount = reg_order.total_guarantee
+                        # print(reg_order.total_commision)
+                        # if reg_order.total_commision > 0 and event_key == 210:
+                        #     amount = reg_order.total_commision
 
-                    #if amount > 0:
-                    for lines in self.conciliation_lines_ids:
-                        if reg_order.amount == lines.amount:
-                            print('entra ')
-                            list_data.append(lines.customer.id)
-                            list_data.append(lines.amount)
-                            list_data.append(self.productid.id)
-                            list_data.append(event_key)
-                            self.env['extenss.credit'].create_records(list_data)
-                            list_data = []
-                            lines.status = 'applied'
-                            lines.check = True
-            self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
-            self.flag_dispersion = True
+                        #if amount > 0:
+                        for lines in self.conciliation_lines_ids:
+                            if reg_order.amount == lines.amount:
+                                print('entra ')
+                                list_data.append(lines.customer.id)
+                                list_data.append(lines.amount)
+                                list_data.append(self.productid.id)
+                                list_data.append(event_key)
+                                self.env['extenss.credit'].create_records(list_data)
+                                list_data = []
+                                lines.status = 'applied'
+                                lines.check = True
+                self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
+                self.flag_dispersion = True
+        else:
+            raise ValidationError(_('Not exist record in Configuration in Datamart'))
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'

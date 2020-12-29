@@ -453,10 +453,9 @@ class Lead(models.Model):
 
     def action_get_offers(self):
         amount = self.payment_capacity
-
         # cred_type_prod = self.env['extenss.product.template'].search([('credit_type.shortcut', '=', 'DN')])
         # for cred in cred_type_prod:
-        prods_ids = self.env['extenss.product.product'].search([('id', '=', self.catlg_product.id)])
+        prods_ids = self.env['extenss.product.product'].search([('product_tmpl_id', '=', self.catlg_product.id)])
         for prod_id in prods_ids:
             print('prod_id.min_amount', prod_id.min_amount)
             print('prod_id.max_amount', prod_id.max_amount)
@@ -528,6 +527,8 @@ class Lead(models.Model):
                     'number_pay_rest': prod_id.number_pay_rest,
                     'frequency_id': prod_id.frequency_extra,
                 })
+            else:
+                raise ValidationError(_('The amount of the selected product exceeds the limits, please select another product'))
     
     def action_calculate_pc(self):
         self.payment_capacity = (self.perceptions - self.deductions) * .80
@@ -586,7 +587,7 @@ class Lead(models.Model):
     ref_number = fields.Char(string='Reference number', tracking=True, translate=True)
 
     product_name = fields.Selection([('af','Arrendamiento Financiero'),('ap','Arrendamiento Puro'),('cs','Crédito Simple'),('dn','Descuento Nómina')], string='Product', tracking=True, translate=True)
-    catlg_product = fields.Many2one('extenss.product.product', string='Product')#compute='_compute_catlg_prod', store=True
+    catlg_product = fields.Many2one('extenss.product.template', string='Product')#compute='_compute_catlg_prod', store=True
     perceptions = fields.Monetary(string='Perceptions', currency_field='company_currency', tracking=True, translate=True)
     deductions = fields.Monetary(string='Deductions', currency_field='company_currency', tracking=True, translate=True)
     payment_capacity = fields.Monetary(string='Payment capacity', currency_field='company_currency', tracking=True, translate=True)
@@ -866,11 +867,6 @@ class ExtenssCrmConciliation(models.Model):
         # statement_s = self.env['account.bank.statement'].search([])
         # for statement in statement_s:
         #     statement.
-
-
-
-
-
         ids = []
         records = self.env['extenss.crm.conciliation'].search_count([('type', '=', 'conciliation'),('name', '=', 'Conciliación')])
         print(records)
