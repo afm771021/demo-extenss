@@ -46,6 +46,8 @@ class ExtenssDN(models.Model):
         days = 0
         interest_due = 0
         interest_mora_sum = 0
+        settle_total = 0
+        sum_total = 0
         records = self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id', '=', self.id),('req_credit_id', '=', False)])
         for rec_notice in records:
             past_due_balance += rec_notice.total_to_pay
@@ -82,7 +84,7 @@ class ExtenssDN(models.Model):
         int_tmp = out_balance * ((itr/100)/base) * days
         vat_int = (vat_credit/100) * int_tmp
 
-        if self.af:
+        if self.dn:
             sum_total = out_balance + int_tmp + vat_int
 
         if self.af: 
@@ -200,14 +202,9 @@ class ExtenssDN(models.Model):
 
     af = fields.Boolean(String='AF')
     account_status_date = fields.Date(string=u'Account Status Date', default=fields.Date.context_today)
-    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines', string='Payment')
+    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines', string='Payment', domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')])
     bill_id = fields.Many2one('extenss.credit.account', string='Bill', tracking=True, translate=True)
-
-    amortization_ids = fields.One2many(
-        'extenss.credit.amortization', 
-        'credit_id', 
-        string='Amortization Table')
-
+    amortization_ids = fields.One2many('extenss.credit.amortization', 'credit_id', string='Amortization Table')
     balance = fields.Monetary(related='bill_id.balance',currency_field='company_currency')
 
     #count_credits = fields.Integer(string='Cont', compute='get_count_credits',  tracking=True)
@@ -446,18 +443,6 @@ class ExtenssLead(models.Model):
                 for reg_events in reg_conf.event_id:
                     event_key = reg_events.event_key
                     for reg_order in self.sale_order_ids:
-
-                        # print(reg_order.total_deposit)
-                        # if reg_order.total_deposit > 0 and event_key == 120:
-                        #     amount = reg_order.total_deposit
-                        # print(reg_order.total_guarantee)
-                        # if reg_order.total_guarantee > 0 and event_key == 140:
-                        #     amount = reg_order.total_guarantee
-                        # print(reg_order.total_commision)
-                        # if reg_order.total_commision > 0 and event_key == 210:
-                        #     amount = reg_order.total_commision
-
-                        #if amount > 0:
                         for lines in self.conciliation_lines_ids:
                             if reg_order.amount == lines.amount:
                                 print('entra ')
@@ -469,8 +454,8 @@ class ExtenssLead(models.Model):
                                 list_data = []
                                 lines.status = 'applied'
                                 lines.check = True
-                self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
-                self.flag_dispersion = True
+                                self.stage_id = self.env['crm.stage'].search([('sequence', '=', '6')]).id
+                                self.flag_dispersion = True
         else:
             raise ValidationError(_('Not exist record in Configuration in Datamart'))
 
