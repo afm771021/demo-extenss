@@ -60,7 +60,7 @@
                                     </header>
                                 </form>
                                 <field name="flag_initial_payment" invisible="1"/>
-                                <field name="conciliation_lines_ids" options="{'no_create': True}" domain="[('status', '=', 'pending')]">
+                                <field name="conciliation_lines_ids" options="{'no_create': True}" domain="[('status', '=', 'pending'),('amount', '&lt;', 0)]">
                                     <tree editable="bottom">
                                         <field name="check" readonly="1"/>
                                         <field name="reference" readonly="1"/>
