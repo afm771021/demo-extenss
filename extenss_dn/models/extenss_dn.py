@@ -202,7 +202,7 @@ class ExtenssDN(models.Model):
 
     af = fields.Boolean(String='AF')
     account_status_date = fields.Date(string=u'Account Status Date', default=fields.Date.context_today)
-    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines','extenss_dn_collection_rel' ,string='Payment', domain=lambda self:[('type_rec', '=', 'dn')])##domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')]###domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"
+    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines','extenss_dn_collection_rel' ,string='Payment', domain=lambda self:[('status', '=', 'pending')])##domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')]###domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"
     bill_id = fields.Many2one('extenss.credit.account', string='Bill', tracking=True, translate=True)
     amortization_ids = fields.One2many('extenss.credit.amortization', 'credit_id', string='Amortization Table')
     balance = fields.Monetary(related='bill_id.balance',currency_field='company_currency')
