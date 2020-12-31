@@ -202,7 +202,7 @@ class ExtenssDN(models.Model):
 
     af = fields.Boolean(String='AF')
     account_status_date = fields.Date(string=u'Account Status Date', default=fields.Date.context_today)
-    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines','extenss_dn_collection_rel' ,string='Payment', domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]")##domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')]
+    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines','extenss_dn_collection_rel' ,string='Payment', domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')])##domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')]###domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"
     bill_id = fields.Many2one('extenss.credit.account', string='Bill', tracking=True, translate=True)
     amortization_ids = fields.One2many('extenss.credit.amortization', 'credit_id', string='Amortization Table')
     balance = fields.Monetary(related='bill_id.balance',currency_field='company_currency')
@@ -487,7 +487,7 @@ class ExtenssCreditConciliationLines(models.Model):
     conciliation_credit_id = fields.Many2one('extenss.credit', string='Credit_id', ondelete='cascade', tracking=True, translate=True)
     conciliation_lines_id = fields.Many2one('crm.lead', string='CRM id', ondelete='cascade', tracking=True, translate=True)
     conciliation_id = fields.Many2one('extenss.credit.conciliation', string='Conciliation', ondelete='cascade', tracking=True, translate=True)
-    type_rec = fields.Selection(selection_add=[('dn', 'DN'),],)
+    #type_rec = fields.Selection(selection_add=[('dn', 'DN'),],)
     status = fields.Selection([('applied', 'Applied'),('pending', 'Pending'),], string='Status', default='pending', tracking=True, translate=True)
 
 # class CreditsAmortization(models.Model):

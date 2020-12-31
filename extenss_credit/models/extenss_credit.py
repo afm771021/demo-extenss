@@ -2996,7 +2996,7 @@ class ExtenssCreditConciliationLines(models.Model):
     check = fields.Boolean(string='Validate', tracking=True, translate=True)
     status = fields.Selection([('applied', 'Applied'),('pending', 'Pending'),],string='Status', tracking=True, translate=True)
     display_type = fields.Selection([('line_section', 'Section'),('line_note', 'Note'),], default=False)
-    type_rec = fields.Selection([('expiry', 'Expiry'),('conciliation', 'Conciliation'),], default=False)
+    type_rec = fields.Selection([('expiry', 'Expiry'),('conciliation', 'Conciliation'),('dn', 'DN'),], default=False)
     bill_id = fields.Many2one('extenss.credit.account', string='Bill', tracking=True, translate=True)
     expiry_id = fields.Char(string='Id expiry', tracking=True, translate=True)
 
