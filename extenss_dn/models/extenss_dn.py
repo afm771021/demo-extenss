@@ -123,25 +123,25 @@ class ExtenssDN(models.Model):
         factor_rate = self.factor_rate
         id_accnt = self.bill_id.id
         flag_early_settlement = True
-        if self.af:
+        if self.dn:
             if self.outstanding_balance > 0:
                 list_concepts.append(['capital', self.outstanding_balance])
-        if self.af:       
-            if self.capital_vat > 0:
-                list_concepts.append(['capvat', self.capital_vat])
-        if self.af:
+        # if self.af:       
+        #     if self.capital_vat > 0:
+        #         list_concepts.append(['capvat', self.capital_vat])
+        if self.dn:
             if self.interests > 0:
                 list_concepts.append(['interest', self.interests])
-        if self.af:
+        if self.dn:
             if self.interests_vat > 0:
                 list_concepts.append(['intvat', self.interests_vat])
         
         if self.penalty_amount > 0:
             list_concepts.append(['penalty_amount', self.penalty_amount])
-        if self.purchase_option > 0:
-            list_concepts.append(['purchase_option', self.purchase_option])
-        if self.vat_purchase_option > 0:
-            list_concepts.append(['vat_option', self.vat_purchase_option])
+        # if self.purchase_option > 0:
+        #     list_concepts.append(['purchase_option', self.purchase_option])
+        # if self.vat_purchase_option > 0:
+        #     list_concepts.append(['vat_option', self.vat_purchase_option])
         if self.interests_moratoriums > 0:
             list_concepts.append(['morint', self.interests_moratoriums])
         if self.vat_interest_mora > 0:
@@ -151,12 +151,12 @@ class ExtenssDN(models.Model):
         self.create_notice_expiry(num_rec, self.id, amount, list_concepts, self.id,self.date_settlement, self.balance_inicial, factor_rate)
 
         # #realiza trasacciones a la cuenta eje
-        if self.security_deposit_balance > 0:
-            self.env['extenss.credit.accounting_payments'].action_apply_movement(id_accnt, 'abono', self.security_deposit_balance, 'Security Deposit Balance payment')
-            guarantee_dep_balance = 0 #09062020
-        if self.balance_income_deposit > 0:
-            self.env['extenss.credit.accounting_payments'].action_apply_movement(id_accnt, 'abono', self.balance_income_deposit, 'Balance Income on Deposit payment')
-            balance_income_deposit = 0 #09062020
+        # if self.security_deposit_balance > 0:
+        #     self.env['extenss.credit.accounting_payments'].action_apply_movement(id_accnt, 'abono', self.security_deposit_balance, 'Security Deposit Balance payment')
+        #     guarantee_dep_balance = 0 #09062020
+        # if self.balance_income_deposit > 0:
+        #     self.env['extenss.credit.accounting_payments'].action_apply_movement(id_accnt, 'abono', self.balance_income_deposit, 'Balance Income on Deposit payment')
+        #     balance_income_deposit = 0 #09062020
 
     def days_between(self, d1, d2):
         # d1 = datetime.strptime(d1, "%Y-%m-%d")
@@ -202,7 +202,7 @@ class ExtenssDN(models.Model):
 
     af = fields.Boolean(String='AF')
     account_status_date = fields.Date(string=u'Account Status Date', default=fields.Date.context_today)
-    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines','extenss_dn_collection_rel' ,string='Payment', domain=lambda self:[('status', '=', 'pending'),('type_rec', '=', 'dn')])
+    conciliation_credit_ids = fields.Many2many('extenss.credit.conciliation_lines',string='Payment')#, domain=lambda self:[('type_rec', '=', 'dn')]
     bill_id = fields.Many2one('extenss.credit.account', string='Bill', tracking=True, translate=True)
     amortization_ids = fields.One2many('extenss.credit.amortization', 'credit_id', string='Amortization Table')
     balance = fields.Monetary(related='bill_id.balance',currency_field='company_currency')
@@ -297,35 +297,35 @@ class ExtenssDN(models.Model):
         list_concepts = []
         for reg in self.conciliation_credit_ids:
             if reg.check == False and reg.status == 'pending':
-                print(self.bill_id.id)
+                # print(self.bill_id.id)
                 self.env['extenss.credit.accounting_payments'].action_apply_movement(self.bill_id.id, 'abono', reg.amount,'')
-                print(reg.id)
-                print(reg.customer.id)
-                print(reg.amount)
-                print(reg.status)
-                print(self.product_id.id)
+                # print(reg.id)
+                # print(reg.customer.id)
+                # print(reg.amount)
+                # print(reg.status)
+                # print(self.product_id.id)
                 reg.status = 'applied'
                 reg.check = True
         exp_notices = self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id', '=', self.id),('total_to_pay', '>', 0)])
         for exp_notice in exp_notices:
-            print(exp_notice.total_to_pay)
-            print(exp_notice.id)
+            # print(exp_notice.total_to_pay)
+            # print(exp_notice.id)
             self.env['extenss.credit.conciliation'].apply_payment(exp_notice.id, self.payment_date)
 
         regs_conf = self.env['extenss.datamart.configuration'].search([('concept', '=', 'early_set')])
         if regs_conf:
             for reg_conf in regs_conf:
-                print(reg.id)
+                # print(reg.id)
                 for reg_events in reg_conf.event_id:
                     event_key = reg_events.event_key
-                    print(event_key)
+                    # print(event_key)
 
                     #for lines in self.conciliation_lines_ids:
                     list_concepts.append(reg.customer.id)
                     list_concepts.append(reg.amount) 
                     list_concepts.append(self.product_id.id)
                     list_concepts.append(event_key) #)
-                    print(list_concepts)
+                    # print(list_concepts)
                     self.env['extenss.credit'].create_records(list_concepts)
                     list_concepts = []
             self.flag_early_settlement = True

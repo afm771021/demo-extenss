@@ -2295,7 +2295,7 @@ class ExtenssCreditConciliation(models.Model):
                     # req=self.env['extenss.credit.request'].search([('id', '=', reg.req_credit_id)])#'&','&','|',,('credit_request_id', '=', credit_id),('type_request','=','early_settlement'),('type_request','=','atc')])
                     # for re in req:
                         # if re.state == 'pending':
-                            ex_no=self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id.id','=',reg.credit_expiry_id.id),('total_to_pay','>',0),('req_credit_id', '=', True)])
+                            ex_no=self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id','=',reg.credit_expiry_id.id),('total_to_pay','>',0),('req_credit_id', '=', True)])
                             over_balance=reg_s.total_settle-reg_s.overdue_balance
                             for exno in ex_no:
                                 if exno.req_credit_id == False:
@@ -2328,9 +2328,9 @@ class ExtenssCreditConciliation(models.Model):
                                     amount=round(conexp.amount_concept,2)
                                     self.env['extenss.credit.accounting_payments'].action_apply_movement(act.id, 'cargo', round(amount,2),'')
                                     cred.total_paid += amount #08072020
-                                ex_no=self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id.id','=',reg.credit_expiry_id.id),('req_credit_id', '=', False)])
+                                ex_no=self.env['extenss.credit.expiry_notices'].search([('credit_expiry_id','=',reg.credit_expiry_id.id),('req_credit_id', '=', False)])
                                 for exno in ex_no:
-                                    concepts_expiration = self.env['extenss.credit.concepts_expiration'].search([('expiry_notice_id.id','=',exno.id)])
+                                    concepts_expiration = self.env['extenss.credit.concepts_expiration'].search([('expiry_notice_id','=',exno.id)])
                                     for conexp in concepts_expiration :
                                         if conexp.full_paid == False:
                                             amount=round((conexp.amount_concept-conexp.total_paid_concept),2)

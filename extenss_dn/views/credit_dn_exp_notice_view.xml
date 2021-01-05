@@ -56,15 +56,15 @@
                             <field name="ap" invisible="1"/>
                             <field name="notice_date"/>
                             <field name="payment_date"/>
-                            <field name="conciliation_credit_ids" options="{'no_create': True}"><!--domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"-->
+                            <field name="conciliation_credit_ids" options="{'no_create': True}" domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"><!--domain="[('status', '=', 'pending'),('type_rec', '=', 'dn')]"-->
                                 <tree editable="bottom">
-                                    <field name="check"/>
+                                    <field name="check" readonly="1"/>
                                     <field name="reference" readonly="1"/>
                                     <field name="customer" options="{'no_open': True}" readonly="1"/>
                                     <field name="date" readonly="1"/>
                                     <field name="amount" readonly="1"/>
                                     <field name="status" readonly="1"/>
-                                    <field name="type_rec" readonly="1"/>
+                                    <field name="type_rec" invisible="1"/>
                                 </tree>
                                 <form>
                                     <sheet>
